@@ -4,9 +4,20 @@ public class BuildingManager : MonoBehaviour
 {
     public static BuildingManager instance;
 
+    public int gridSize = 10;
+    private Building[,] grid = new Building[10, 10];
+
+    [SerializeField]
+    private GameObject ground;
+
     private void Awake()
     {
         instance = this;
+
+        grid = new Building[gridSize, gridSize];
+
+        ground.transform.localScale = new Vector3(gridSize * BuildingTileSize, 1, gridSize * BuildingTileSize);
+        ground.transform.position = ground.transform.localScale / 2 - new Vector3(((float)BuildingTileSize) / 2, 0.5f, ((float)BuildingTileSize) / 2);
     }
 
     public const int BuildingTileSize = 3;
@@ -89,8 +100,6 @@ public class BuildingManager : MonoBehaviour
     {
         return new Vector3(gridPos.x * BuildingTileSize, 1, gridPos.y * BuildingTileSize);
     }
-
-    private Building[,] grid = new Building[10, 10];
 
     //later to be added is a chunk system for this
 
