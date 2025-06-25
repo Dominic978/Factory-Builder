@@ -19,6 +19,17 @@ public class PlayerController : MonoBehaviour
     private float horizontalRotation = 0;
     private float verticalRotation = 50;
 
+    public int buildingId { get; set; } = -1;
+
+    //where is omni-man?
+    //where is he!!
+    //are you sure
+    //where is he!!
+    //are you sure
+    //you bastard
+    //where is he!!
+    //are you sure
+
     private void Update()
     {
         //movement
@@ -31,12 +42,27 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, horizontalRotation, 0);
         _camera.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
 
-        BuildingManager.instance.HandlePreviewBuilding(0, 0, input.mousePosition3d);
-
-        if(input.clicked)
+        //building
+        if(buildingId != -1)
         {
-            BuildingManager.instance.PlaceBuilding(0, 0, input.mousePosition3d);
-            input.clicked = false;
+            bool pointerOverUI = input.IsPointerOverUIElement();
+
+            if (pointerOverUI)
+                BuildingManager.instance.CancelPreviewBuilding(buildingId);
+            else
+                BuildingManager.instance.HandlePreviewBuilding(buildingId, 0, input.mousePosition3d);
+
+            if (input.leftClicked)
+            {
+                if (!pointerOverUI)
+                    BuildingManager.instance.PlaceBuilding(buildingId, 0, input.mousePosition3d);
+                input.leftClicked = false;
+            }
+            else if(input.rightClicked)
+            {
+                BuildingManager.instance.CancelPreviewBuilding(buildingId);
+                buildingId = -1;
+            }
         }
     }
 }

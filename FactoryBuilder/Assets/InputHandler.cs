@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UnityEngine.InputSystem.InputAction;
 
 public class InputHandler : MonoBehaviour
@@ -23,6 +25,43 @@ public class InputHandler : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        uiLayer = LayerMask.NameToLayer("UI");
+    }
+
+    private int uiLayer;
+
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    public bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+
+
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.layer == uiLayer)
+                return true;
+        }
+        return false;
+    }
+
+
+    //Gets all event system raycast results of current mouse or touch position.
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
+    }
+
     [Tooltip("Required for using mousePosition3d")]
     public Camera _camera;
     public LayerMask raycastTarget;
@@ -30,7 +69,8 @@ public class InputHandler : MonoBehaviour
     [NonSerialized] public Vector2 mousePosition;
     [NonSerialized] public Vector2 rotation;
     [NonSerialized] public int buildingRotation;
-    [NonSerialized] public bool clicked;
+    [NonSerialized] public bool leftClicked;
+    [NonSerialized] public bool rightClicked;
 
     public void Move(CallbackContext context)
     {
@@ -47,9 +87,14 @@ public class InputHandler : MonoBehaviour
         rotation.y = context.ReadValue<float>();
     }
 
-    public void Click(CallbackContext context)
+    public void LeftClick(CallbackContext context)
     {
-        clicked = context.ReadValue<float>() > 0.5f;
+        leftClicked = context.ReadValue<float>() > 0.5f;
+    }
+
+    public void RightClicked(CallbackContext context)
+    {
+        rightClicked = context.ReadValue<float>() > 0.5f;
     }
 
     public void MousePosition(CallbackContext context)
