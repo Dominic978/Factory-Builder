@@ -29,8 +29,6 @@ public class BuildingManager : MonoBehaviour
         [Tooltip("y axis represents how much it'll take on the z axis")]
         public Vector2Int size;
 
-        public Vector3 offset;
-
         public GameObject buildingPrefab;
         public GameObject buildingPreview;
     }
@@ -52,7 +50,7 @@ public class BuildingManager : MonoBehaviour
 
         Transform preview = buildingInfo.buildingPreview.transform;
 
-        preview.position = buildingPosition + buildings[buildingId].offset;
+        preview.position = buildingPosition + buildingInfo.buildingPrefab.transform.position;
         preview.rotation = Quaternion.Euler(0, 90 * buildingRotation, 0);
 
         if (buildingRotation % 2 == 1)
@@ -88,7 +86,7 @@ public class BuildingManager : MonoBehaviour
 
         buildingPosition = GridPosToVec3(gridPos);
 
-        Building building = Instantiate(buildingInfo.buildingPrefab, buildingPosition + buildings[buildingId].offset, Quaternion.Euler(0, 90 * buildingRotation, 0)).GetComponent<Building>();
+        Building building = Instantiate(buildingInfo.buildingPrefab, buildingPosition + buildingInfo.buildingPrefab.transform.position, Quaternion.Euler(0, 90 * buildingRotation, 0)).GetComponent<Building>();
 
         PlaceBuildingOnGrid(in buildingInfo.size, building, gridPos);
     }
