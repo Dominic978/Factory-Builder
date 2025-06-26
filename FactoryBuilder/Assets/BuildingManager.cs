@@ -1,11 +1,14 @@
 using UnityEngine;
 
+/// <summary>
+/// The script you access for all things about building
+/// </summary>
 public class BuildingManager : MonoBehaviour
 {
     public static BuildingManager instance;
 
     public int gridSize = 10;
-    private Building[,] grid = new Building[10, 10];
+    private Building[,] grid;
 
     [SerializeField]
     private GameObject ground;
@@ -15,11 +18,12 @@ public class BuildingManager : MonoBehaviour
         instance = this;
 
         grid = new Building[gridSize, gridSize];
-
+        //Makes the ground the same size as the grid
         ground.transform.localScale = new Vector3(gridSize * BuildingTileSize, 1, gridSize * BuildingTileSize);
         ground.transform.position = ground.transform.localScale / 2 - new Vector3(((float)BuildingTileSize) / 2, 0.5f, ((float)BuildingTileSize) / 2);
     }
 
+    //the Size of a 1x1 building
     public const int BuildingTileSize = 3;
 
     [System.Serializable]
@@ -35,6 +39,7 @@ public class BuildingManager : MonoBehaviour
 
     public BuildingInfo[] buildings;
 
+    [Tooltip("Material that is used by preview buildings to indicate if it can be placed or not")]
     public Material previewMaterial;
     public Color CanPlaceColour;
     public Color CantPlaceColour;
@@ -62,10 +67,7 @@ public class BuildingManager : MonoBehaviour
             previewMaterial.color = CantPlaceColour;
     }
 
-    public void CancelPreviewBuilding(int buildingId)
-    {
-        buildings[buildingId].buildingPreview.SetActive(false);
-    }
+    public void CancelPreviewBuilding(int buildingId) => buildings[buildingId].buildingPreview.SetActive(false);
 
     /// <summary>
     /// 
@@ -91,18 +93,10 @@ public class BuildingManager : MonoBehaviour
         PlaceBuildingOnGrid(in buildingInfo.size, building, gridPos);
     }
 
-    public Vector2Int Vec3ToGridPos(Vector3 vec3)
-    {
-        return new Vector2Int((int)(vec3.x / BuildingTileSize + 0.5f), (int)(vec3.z / BuildingTileSize + 0.5f));
-    }
+    public Vector2Int Vec3ToGridPos(Vector3 vec3) => new Vector2Int((int)(vec3.x / BuildingTileSize + 0.5f), (int) (vec3.z / BuildingTileSize + 0.5f));
+    public Vector3 GridPosToVec3(Vector2Int gridPos) => new Vector3(gridPos.x * BuildingTileSize, 1, gridPos.y * BuildingTileSize);
 
-    public Vector3 GridPosToVec3(Vector2Int gridPos)
-    {
-        return new Vector3(gridPos.x * BuildingTileSize, 1, gridPos.y * BuildingTileSize);
-    }
-
-    //later to be added is a chunk system for this
-
+    //add support for a chunk system later
     private void PlaceBuildingOnGrid(in Vector2Int size, Building building, Vector2Int gridPos)
     {
         for (int x = 0; x < size.x; x++)

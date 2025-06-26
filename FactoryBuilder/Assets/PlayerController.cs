@@ -1,5 +1,19 @@
 using UnityEngine;
 
+/// <summary>
+///     Basic player controller
+///     <list type="bullet">
+///         <item>rotatation on X and Y axis's</item>
+///         <item>Movement on X and Z axis's</item>
+///         <item>right click to stop building</item>
+///         <item>
+///             Can place buildings
+///             <list type="bullet">
+///                 if Mouse is hovering over UI while placing buildings, doesn't place
+///             </list>
+///         </item>
+///     </list>
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     public float speed;
@@ -21,15 +35,6 @@ public class PlayerController : MonoBehaviour
 
     public int buildingId { get; set; } = -1;
 
-    //where is omni-man?
-    //where is he!!
-    //are you sure
-    //where is he!!
-    //are you sure
-    //you bastard
-    //where is he!!
-    //are you sure
-
     private void Update()
     {
         //movement
@@ -50,12 +55,12 @@ public class PlayerController : MonoBehaviour
             if (pointerOverUI)
                 BuildingManager.instance.CancelPreviewBuilding(buildingId);
             else
-                BuildingManager.instance.HandlePreviewBuilding(buildingId, 0, input.mousePosition3d);
+                BuildingManager.instance.HandlePreviewBuilding(buildingId, input.buildingRotation, input.mousePosition3d);
 
             if (input.leftClicked)
             {
                 if (!pointerOverUI)
-                    BuildingManager.instance.PlaceBuilding(buildingId, 0, input.mousePosition3d);
+                    BuildingManager.instance.PlaceBuilding(buildingId, input.buildingRotation, input.mousePosition3d);
                 input.leftClicked = false;
             }
             else if(input.rightClicked)

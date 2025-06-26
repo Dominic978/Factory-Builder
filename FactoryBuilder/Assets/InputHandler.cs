@@ -6,8 +6,10 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class InputHandler : MonoBehaviour
 {
+    // WASD controls mapped to Vector2
     [NonSerialized] public Vector2 movement;
 
+    // movement represented with a Vector3 and points in the direction the attached transform is facing
     public Vector3 movement3d
     {
         get
@@ -16,11 +18,12 @@ public class InputHandler : MonoBehaviour
         }
     }
 
+    // raycasted mousePosition from <see cref="_camera"/>
     public Vector3 mousePosition3d
     {
         get
         {
-            Physics.Raycast(_camera.ScreenPointToRay(mousePosition), out RaycastHit hit, float.PositiveInfinity, raycastTarget);
+            Physics.Raycast(_camera.ScreenPointToRay(mousePosition), out RaycastHit hit, float.PositiveInfinity, mouse3dLayerMask);
             return hit.point;
         }
     }
@@ -62,15 +65,24 @@ public class InputHandler : MonoBehaviour
         return raysastResults;
     }
 
-    [Tooltip("Required for using mousePosition3d")]
+    [Tooltip("The camera that mousePosition3d uses for raycasting")]
     public Camera _camera;
-    public LayerMask raycastTarget;
+    [Tooltip("The Layer Mask that is used when raycasting for mousePosition3d")]
+    public LayerMask mouse3dLayerMask;
 
     [NonSerialized] public Vector2 mousePosition;
+    // mouse delta, used for rotation PlayerController
     [NonSerialized] public Vector2 rotation;
+    // building rotation for the Y axis, and when applying to Building multipled by 90
     [NonSerialized] public int buildingRotation;
     [NonSerialized] public bool leftClicked;
     [NonSerialized] public bool rightClicked;
+
+    public void BuildingRotatation(CallbackContext context)
+    {
+        buildingRotation += (int)Mathf.Clamp(context.ReadValue<float>(), -1, 1);
+        buildingRotation %= 4;
+    }
 
     public void Move(CallbackContext context)
     {

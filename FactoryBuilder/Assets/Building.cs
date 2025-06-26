@@ -2,8 +2,8 @@
 
 public class Building : MonoBehaviour
 {
-    public Vector2Int gridPos;//set at init
-    public Vector2Int size;   //set at init
+    public Vector2Int gridPos;
+    public Vector2Int size;   
 
     public void Init(Vector2Int gridPos, Vector2Int size)
     {
