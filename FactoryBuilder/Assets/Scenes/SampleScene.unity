@@ -2142,7 +2142,6 @@ MonoBehaviour:
   mouse3dLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  buildingRotation: 0
 --- !u!1 &2128417510
 GameObject:
   m_ObjectHideFlags: 0

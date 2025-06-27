@@ -101,37 +101,62 @@ public class BuildingManager : MonoBehaviour
     {
         for (int x = 0; x < size.x; x++)
             for (int z = 0; z < size.y; z++)
+            {
                 grid[x + gridPos.x, z + gridPos.y] = building;
 
-        building.Init(gridPos, size);
-    }
+                //using da method since it checks if we are out of range
+                //also if buildings are bigger than 1x1 will update its self
+                GetBuilding(x + gridPos.x + 1, z + gridPos.y)?.UpdateBuilding();
+                GetBuilding(x + gridPos.x - 1, z + gridPos.y)?.UpdateBuilding();
+                GetBuilding(x + gridPos.x, z + gridPos.y + 1)?.UpdateBuilding();
+                GetBuilding(x + gridPos.x, z + gridPos.y - 1)?.UpdateBuilding();
+            }
 
-    public static T GetBuilding<T>(Vector2Int gridPos) where T : Building
-    {
-        Building b = instance.grid[gridPos.x, gridPos.y];
-        if(b is T)
-            return (T)b;
-        return null;
+        building.Init(gridPos, size);
     }
 
     public static T GetBuilding<T>(Vector3 position) where T : Building
     {
         Vector2Int gridPos = Vec3ToGridPos(position);
-        Building b = instance.grid[gridPos.x, gridPos.y];
-        if (b is T)
-            return (T)b;
-        return null;
-    }
-
-    public static Building GetBuilding(Vector2Int gridPos)
-    {
-        return instance.grid[gridPos.x, gridPos.y];
+        return GetBuilding<T>(gridPos);
     }
 
     public static Building GetBuilding(Vector3 position)
     {
         Vector2Int gridPos = Vec3ToGridPos(position);
-        return instance.grid[gridPos.x, gridPos.y];
+        return GetBuilding(gridPos);
+    }
+
+    public static T GetBuilding<T>(Vector2Int gridPos) where T : Building
+    {
+        if(instance.gridSize > gridPos.x && gridPos.x >= 0 && instance.gridSize > gridPos.y && gridPos.y >= 0)
+        {
+            Building b = instance.grid[gridPos.x, gridPos.y];
+            if (b is T)
+                return (T)b;
+        }
+        return null;
+    }
+
+    public static Building GetBuilding(Vector2Int gridPos)
+    {
+        return instance.gridSize > gridPos.x && gridPos.x >= 0 && instance.gridSize > gridPos.y && gridPos.y >= 0 ? instance.grid[gridPos.x, gridPos.y] : null;
+    }
+
+    public static T GetBuilding<T>(int x, int y) where T : Building
+    {
+        if (instance.gridSize < x && x >= 0 && instance.gridSize < y && y >= 0)
+        {
+            Building b = instance.grid[x, y];
+            if (b is T)
+                return (T)b;
+        }
+        return null;
+    }
+
+    public static Building GetBuilding(int x, int y)
+    {
+        return instance.gridSize > x && x >= 0 && instance.gridSize > y && y >= 0 ? instance.grid[x, y] : null;
     }
 
     /// <summary>

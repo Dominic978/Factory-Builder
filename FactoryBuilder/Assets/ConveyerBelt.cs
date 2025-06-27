@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ConveyerBelt : Building
 {
+    [System.Serializable]
     public class BeltSpot 
     {
         public WorldItem item;
@@ -23,29 +24,37 @@ public class ConveyerBelt : Building
     {
         Vector3 rightEdge = transform.right * BuildingManager.BuildingTileSize / 4;
         Vector3 frontEdge = transform.forward * BuildingManager.BuildingTileSize / 4;
-        leftConveyerChain[0] = new (-rightEdge - frontEdge + transform.position + Vector3.up);
-        leftConveyerChain[1] = new (-rightEdge + frontEdge + transform.position + Vector3.up);
-        rightConveyerChain[0] = new (rightEdge - frontEdge + transform.position + Vector3.up);
-        rightConveyerChain[1] = new (rightEdge + frontEdge + transform.position + Vector3.up);
+        conveyerChain[2] = new (-rightEdge - frontEdge + transform.position + Vector3.up);
+        conveyerChain[3] = new (-rightEdge + frontEdge + transform.position + Vector3.up);
+        conveyerChain[0] = new (rightEdge - frontEdge + transform.position + Vector3.up);
+        conveyerChain[1] = new (rightEdge + frontEdge + transform.position + Vector3.up);
     }
 
-    [HideInInspector]
-    public BeltSpot[] leftConveyerChain = new BeltSpot[2];
-    [HideInInspector]
-    public BeltSpot[] rightConveyerChain = new BeltSpot[2];
+    public ConveyerBelt forwardBelt;
+
+    public override void UpdateBuilding()
+    {
+        forwardBelt = BuildingManager.GetBuilding<ConveyerBelt>(gridPos + new Vector2Int((int)transform.forward.x, (int)transform.forward.z));
+    }
+
+    // 0 = rightConveyerChain[0]
+    // 1 = rightConveyerChain[1]
+    // 2 = leftConveyerChain[0]
+    // 3 = leftConveyerChain[1]
+    //[HideInInspector]
+    public BeltSpot[] conveyerChain = new BeltSpot[4];
 
     private const float timeMovingBetweenSpots = 3;
 
     //moves items on conveyerBelt (:
     public void Update()
     {
-        HandleMovingBeltSpot(leftConveyerChain[0], leftConveyerChain[1]);
-        HandleMovingBeltSpot(rightConveyerChain[0], rightConveyerChain[1]);
+        HandleMovingBeltSpot(conveyerChain[2], conveyerChain[3]);
+        HandleMovingBeltSpot(conveyerChain[0], conveyerChain[1]);
 
         //I've decided to let the forward conveyerBelt handle the movement
-        ConveyerBelt forwardBelt = BuildingManager.GetBuilding<ConveyerBelt>(gridPos + new Vector2Int((int)transform.forward.x, (int)transform.forward.z));
-        forwardBelt?.TransferItemToMyBelt(leftConveyerChain[1], true, transform.forward);
-        forwardBelt?.TransferItemToMyBelt(rightConveyerChain[1], false, transform.forward);
+        forwardBelt?.TransferItemToMyBelt(conveyerChain[3], true, transform.forward);
+        forwardBelt?.TransferItemToMyBelt(conveyerChain[1], false, transform.forward);
     }
 
     /// <summary>
@@ -84,23 +93,23 @@ public class ConveyerBelt : Building
         if(otherBeltForward == transform.forward)
         {
             if(_isLeftChain)
-                HandleMovingBeltSpot(otherBeltSpot, leftConveyerChain[0]);
+                HandleMovingBeltSpot(otherBeltSpot, conveyerChain[2]);
             else
-                HandleMovingBeltSpot(otherBeltSpot, rightConveyerChain[0]);
+                HandleMovingBeltSpot(otherBeltSpot, conveyerChain[0]);
         }
         else if(otherBeltForward == transform.right)//belt is on my left
         {
             if (_isLeftChain)
-                HandleMovingBeltSpot(otherBeltSpot, leftConveyerChain[1]);
+                HandleMovingBeltSpot(otherBeltSpot, conveyerChain[3]);
             else
-                HandleMovingBeltSpot(otherBeltSpot, leftConveyerChain[0]);
+                HandleMovingBeltSpot(otherBeltSpot, conveyerChain[2]);
         }
         else if (otherBeltForward == -transform.right)//belt is on my right
         {
             if (_isLeftChain)
-                HandleMovingBeltSpot(otherBeltSpot, rightConveyerChain[0]);
+                HandleMovingBeltSpot(otherBeltSpot, conveyerChain[0]);
             else
-                HandleMovingBeltSpot(otherBeltSpot, rightConveyerChain[1]);
+                HandleMovingBeltSpot(otherBeltSpot, conveyerChain[1]);
         }
         else if (otherBeltForward == -transform.forward)
             return;//point into eachother no point in moving items

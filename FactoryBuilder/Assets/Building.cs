@@ -9,5 +9,11 @@ public class Building : MonoBehaviour
     {
         this.gridPos = gridPos;
         this.size = size;
+        UpdateBuilding();
+    }
+
+    public virtual void UpdateBuilding()
+    {
+        //implement within children classes
     }
 }
