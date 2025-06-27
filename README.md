@@ -22,13 +22,15 @@ What this project is used for; A simple starting point for a factory game, and s
       <li>can rotation on the X and Y axis</li>
     </ul>
 </ul>
-
+<h2>---Premade Buildings---</h2>
+<ul>
+  <li>Conveyer Belt</li>
+</ul>
 
 <h2>---Planned Features---</h2>
 <ul>
   <li>Pre made buildings and scripts</li>
   <ul>
-    <li>Conveyer Belt</li>
     <li>Material Spawner</li>
     <li>Crafter</li>
     <li>Material Dump</li>
