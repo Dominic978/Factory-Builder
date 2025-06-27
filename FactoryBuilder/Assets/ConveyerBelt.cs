@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ConveyerBelt : Building
 {
-    [System.Serializable]
     public class BeltSpot 
     {
         public WorldItem item;
@@ -24,6 +23,8 @@ public class ConveyerBelt : Building
     {
         Vector3 rightEdge = transform.right * BuildingManager.BuildingTileSize / 4;
         Vector3 frontEdge = transform.forward * BuildingManager.BuildingTileSize / 4;
+
+        //sets position for where all the conveyer spots are
         conveyerChain[2] = new (-rightEdge - frontEdge + transform.position + Vector3.up);
         conveyerChain[3] = new (-rightEdge + frontEdge + transform.position + Vector3.up);
         conveyerChain[0] = new (rightEdge - frontEdge + transform.position + Vector3.up);
@@ -41,7 +42,7 @@ public class ConveyerBelt : Building
     // 1 = rightConveyerChain[1]
     // 2 = leftConveyerChain[0]
     // 3 = leftConveyerChain[1]
-    //[HideInInspector]
+    [HideInInspector]
     public BeltSpot[] conveyerChain = new BeltSpot[4];
 
     private const float timeMovingBetweenSpots = 3;
