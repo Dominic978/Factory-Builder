@@ -93,8 +93,8 @@ public class BuildingManager : MonoBehaviour
         PlaceBuildingOnGrid(in buildingInfo.size, building, gridPos);
     }
 
-    public Vector2Int Vec3ToGridPos(Vector3 vec3) => new Vector2Int((int)(vec3.x / BuildingTileSize + 0.5f), (int) (vec3.z / BuildingTileSize + 0.5f));
-    public Vector3 GridPosToVec3(Vector2Int gridPos) => new Vector3(gridPos.x * BuildingTileSize, 1, gridPos.y * BuildingTileSize);
+    public static Vector2Int Vec3ToGridPos(Vector3 vec3) => new Vector2Int((int)(vec3.x / BuildingTileSize + 0.5f), (int) (vec3.z / BuildingTileSize + 0.5f));
+    public static Vector3 GridPosToVec3(Vector2Int gridPos) => new Vector3(gridPos.x * BuildingTileSize, 1, gridPos.y * BuildingTileSize);
 
     //add support for a chunk system later
     private void PlaceBuildingOnGrid(in Vector2Int size, Building building, Vector2Int gridPos)
@@ -102,6 +102,36 @@ public class BuildingManager : MonoBehaviour
         for (int x = 0; x < size.x; x++)
             for (int z = 0; z < size.y; z++)
                 grid[x + gridPos.x, z + gridPos.y] = building;
+
+        building.Init(gridPos, size);
+    }
+
+    public static T GetBuilding<T>(Vector2Int gridPos) where T : Building
+    {
+        Building b = instance.grid[gridPos.x, gridPos.y];
+        if(b is T)
+            return (T)b;
+        return null;
+    }
+
+    public static T GetBuilding<T>(Vector3 position) where T : Building
+    {
+        Vector2Int gridPos = Vec3ToGridPos(position);
+        Building b = instance.grid[gridPos.x, gridPos.y];
+        if (b is T)
+            return (T)b;
+        return null;
+    }
+
+    public static Building GetBuilding(Vector2Int gridPos)
+    {
+        return instance.grid[gridPos.x, gridPos.y];
+    }
+
+    public static Building GetBuilding(Vector3 position)
+    {
+        Vector2Int gridPos = Vec3ToGridPos(position);
+        return instance.grid[gridPos.x, gridPos.y];
     }
 
     /// <summary>
