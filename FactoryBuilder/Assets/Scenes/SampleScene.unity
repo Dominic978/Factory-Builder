@@ -675,7 +675,7 @@ GameObject:
   - component: {fileID: 545476660}
   - component: {fileID: 545476659}
   m_Layer: 0
-  m_Name: preview (1)
+  m_Name: Storage Preview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -776,7 +776,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -2.78, z: 0}
-  m_LocalScale: {x: 6.4, y: 1.1, z: 6.4}
+  m_LocalScale: {x: 6, y: 3, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1464,7 +1464,7 @@ GameObject:
   - component: {fileID: 1499522199}
   - component: {fileID: 1499522198}
   m_Layer: 0
-  m_Name: preview
+  m_Name: Conveyer Belt Preview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

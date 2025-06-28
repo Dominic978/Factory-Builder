@@ -31,11 +31,12 @@ public class ConveyerBelt : Building
         conveyerChain[1] = new (rightEdge + frontEdge + transform.position + Vector3.up);
     }
 
-    public ConveyerBelt forwardBelt;
+    public Building forwardBuilding;
 
     public override void UpdateBuilding()
     {
-        forwardBelt = BuildingManager.GetBuilding<ConveyerBelt>(gridPos + new Vector2Int((int)transform.forward.x, (int)transform.forward.z));
+        forwardBuilding = BuildingManager.GetBuilding<Building>(gridPos + new Vector2Int((int)transform.forward.x, (int)transform.forward.z));
+        BuildingManager.GetBuilding<Storage>(gridPos - new Vector2Int((int)transform.forward.x, (int)transform.forward.z))?.AddConveyerBelt(this);
     }
 
     // 0 = rightConveyerChain[0]
@@ -54,8 +55,18 @@ public class ConveyerBelt : Building
         HandleMovingBeltSpot(conveyerChain[0], conveyerChain[1]);
 
         //I've decided to let the forward conveyerBelt handle the movement
-        forwardBelt?.TransferItemToMyBelt(conveyerChain[3], true, transform.forward);
-        forwardBelt?.TransferItemToMyBelt(conveyerChain[1], false, transform.forward);
+        if(forwardBuilding is ConveyerBelt forwardConveyerBelt)
+        {
+            forwardConveyerBelt.TransferItemToMyBelt(conveyerChain[3], true, transform.forward);
+            forwardConveyerBelt.TransferItemToMyBelt(conveyerChain[1], false, transform.forward);
+        }
+        else if(forwardBuilding is Storage forwardStorage)
+        {
+            if (conveyerChain[1].item != null) 
+                forwardStorage.AddItem(conveyerChain[1].item);
+            if (conveyerChain[3].item != null) 
+                forwardStorage.AddItem(conveyerChain[3].item);
+        }
     }
 
     /// <summary>

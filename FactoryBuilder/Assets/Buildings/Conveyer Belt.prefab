@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1851397695580152074}
   - component: {fileID: -1009687122590280759}
   m_Layer: 0
-  m_Name: building
+  m_Name: Conveyer Belt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

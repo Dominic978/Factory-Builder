@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 114539313451672039}
   - component: {fileID: 4703781887144308532}
   - component: {fileID: 5971789094247958696}
-  - component: {fileID: 7784973376984585264}
+  - component: {fileID: 1279464346179477864}
   m_Layer: 0
-  m_Name: building (1)
+  m_Name: Storage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 3725739727044068208}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: 1.5}
-  m_LocalScale: {x: 6, y: 1, z: 6}
+  m_LocalPosition: {x: 1.5, y: 1, z: 1.5}
+  m_LocalScale: {x: 6, y: 3, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7784973376984585264
+--- !u!114 &1279464346179477864
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,8 +115,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3725739727044068208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23029fa879a723049bd1214dce43f877, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f845f717f2a1eb459b66fd0244e552e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gridPos: {x: 0, y: 0}
   size: {x: 0, y: 0}
+  test: {fileID: 11400000, guid: cb224f51a28d3b84b9d47eef58af2df7, type: 2}
