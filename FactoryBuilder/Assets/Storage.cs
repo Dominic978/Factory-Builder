@@ -12,14 +12,6 @@ public class Storage : Building
     //Im making the storage building handle the outputs, so first I could have it only output to 1 conveyerbelt at a time and to switch between lanes
     private ConveyerBelt[] outputConveyerBelts = new ConveyerBelt[0];
 
-    public ItemData test;
-
-    [ContextMenu("test")]
-    public void AddItemTest()
-    {
-        AddItem(test);
-    }
-
     public void AddConveyerBelt(ConveyerBelt belt)
     {
         foreach (var conveyerBelt in outputConveyerBelts)

@@ -48,6 +48,10 @@ public class ConveyerBelt : Building
 
     private const float timeMovingBetweenSpots = 3;
 
+    // TODO :
+    //      - make it so when conveyerBelts that are being moved onto one that is rotated 90 Degrees to make is so the left and right lanes stay on the right and left if they is only 1 conveyer moving into it
+    //      - when multiple items are moving into 1 spot pick a winner (one already on the conveyerBelt or same direction as the conveyer belt)
+
     //moves items on conveyerBelt (:
     public void Update()
     {

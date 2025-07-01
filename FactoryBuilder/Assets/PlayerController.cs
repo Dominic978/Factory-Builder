@@ -16,6 +16,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
+
     public float speed;
 
     public float horizontalRotationSpeed;
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         input = GetComponent<InputHandler>();
     }
 
