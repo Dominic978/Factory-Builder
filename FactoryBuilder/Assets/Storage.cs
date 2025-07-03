@@ -36,7 +36,7 @@ public class Storage : Building
         outputConveyerBelts = outputConveyerBelts.Where(belt => belt != null).ToArray();
     }
 
-    private float timeBetweenOutputs = 1.5f;
+    private const float timeBetweenOutputs = 1.5f;
     private float time;
 
     private int currentIndexOfOutput = 0;
@@ -70,24 +70,16 @@ public class Storage : Building
     /// <param name="worldItem"></param>
     public virtual void AddItem(WorldItem worldItem)
     {
-        //will always be added as im making this a very simple storage script
-        if(!storedItems.TryAdd(worldItem.itemData, 1))
-        {
-            storedItems[worldItem.itemData]++;//if we got it increase value
-        }
-        Destroy(worldItem.gameObject);
+        if(AddItem(worldItem.itemData))
+            Destroy(worldItem.gameObject);
     }
 
-    /// <summary>
-    /// Do not fret about removing the world item as this method will remove it if it can be added
-    /// </summary>
-    /// <param name="itemData"></param>
-    public virtual bool AddItem(ItemData itemData)
+    public virtual bool AddItem(ItemData itemData, int amount = 1)
     {
         //will always be added as im making this a very simple storage script
-        if (!storedItems.TryAdd(itemData, 1))
+        if (!storedItems.TryAdd(itemData, amount))
         {
-            storedItems[itemData]++;//if we got it increase value
+            storedItems[itemData] += amount;//if we got it increase value
         }
         return true;
     }
@@ -101,25 +93,23 @@ public class Storage : Building
         if (storedItems.Count == 0)
             return null;
         KeyValuePair<ItemData, int> pair = storedItems.ElementAt(Random.Range(0, storedItems.Count));
-        if (pair.Value <= 1)
-            storedItems.Remove(pair.Key);
-        else
-            storedItems[pair.Key]--;
-        return pair.Key;
+        if (RemoveItem(pair.Key))
+            return pair.Key;
+        return null;
     }
 
     /// <summary>
     /// </summary>
     /// <param name="target"></param>
     /// <returns>if we succesfully removed the target item</returns>
-    public virtual bool RemoveItem(ItemData target)
+    public virtual bool RemoveItem(ItemData target, int amount = 1)
     {
-        if(storedItems.ContainsKey(target))
+        if (storedItems.TryGetValue(target, out int itemAmount))
         {
-            if (storedItems[target] == 1)
+            if (itemAmount <= amount)
                 storedItems.Remove(target);
             else
-                storedItems[target]--;
+                itemAmount -= amount;
             return true;
         }
         return false;

@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a48aef9793eddc4aa8082fc09e32251, type: 3}
-  m_Name: TestItem
+  m_Name: TestItemBlue
   m_EditorClassIdentifier: 
-  worldItem: {fileID: 6152559202301912681, guid: bb33e524d4fc984419fa6f54ddb3a29f, type: 3}
+  worldItem: {fileID: 6152559202301912681, guid: cbf6b4760136b49428187411be62b1d8, type: 3}

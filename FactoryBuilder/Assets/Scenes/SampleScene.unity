@@ -1384,6 +1384,10 @@ MonoBehaviour:
     size: {x: 1, y: 1}
     buildingPrefab: {fileID: 9092430141059161752, guid: c022f1ed93ec413418e5ed427ac44576, type: 3}
     buildingPreview: {fileID: 3254276353752707725}
+  - name: Crafter
+    size: {x: 2, y: 2}
+    buildingPrefab: {fileID: 3725739727044068208, guid: 37e3fdd45359603469e5ed63ebbf85a7, type: 3}
+    buildingPreview: {fileID: 3254276353752707725}
   previewMaterial: {fileID: 2100000, guid: cba61c9b6eeada34c82095554a728a87, type: 2}
   CanPlaceColour: {r: 0, g: 0.96862745, b: 1, a: 0.21960784}
   CantPlaceColour: {r: 1, g: 0, b: 0, a: 0.21960784}
