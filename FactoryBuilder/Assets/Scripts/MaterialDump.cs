@@ -6,9 +6,9 @@ public class MaterialDump : Storage
         Destroy(worldItem.gameObject);
     }
 
-    public override bool AddItem(ItemData worldItem, int amount = 1) => true;
+    public override bool AddItem(ItemData worldItem, int amount = 1, bool careAboutFilter = true) => true;
 
     //It takes items not gives them
     public override ItemData RemoveItem() => null;
-    public override bool RemoveItem(ItemData target, int amount = 1) => false;
+    public override bool RemoveItem(ItemData target, int amount = 1, bool careAboutFilter = true) => false;
 }

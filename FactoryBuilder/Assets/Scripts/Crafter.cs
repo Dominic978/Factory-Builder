@@ -3,17 +3,14 @@ public class Crafter : Storage
 {
     public Recipe targetRecipe;
 
-    public override bool AddItem(ItemData itemData, int amount = 1)
+    public override bool AddItem(ItemData itemData, int amount = 1, bool careAboutFilter = true)
     {
-        //will always be added as im making this a very simple storage script
-        if (!storedItems.TryAdd(itemData, amount))
-        {
-            storedItems[itemData] += amount;//if we got it increase value
-        }
+        bool added = base.AddItem(itemData, amount, careAboutFilter);
 
-        Craft();//tries to craft
+        if(added)//no point in trying to craft if no more items were added
+            Craft();//tries to craft
 
-        return true;
+        return added;
     }
 
     public void Craft()
@@ -24,15 +21,16 @@ public class Crafter : Storage
             {
                 storedItems[itemAndAmount.itemData] -= itemAndAmount.amount;
             }
-            AddItem(targetRecipe.output.itemData, targetRecipe.output.amount);
+            AddItem(targetRecipe.output.itemData, targetRecipe.output.amount, false);
         }
     }
+
 
     public bool CanCraft()
     {
         foreach (var itemAndAmount in targetRecipe.requiredItemAmounts)
         {
-            if(!storedItems.TryGetValue(itemAndAmount.itemData, out int amount) || amount < itemAndAmount.amount)
+            if (!storedItems.TryGetValue(itemAndAmount.itemData, out int amount) || amount < itemAndAmount.amount)
                 return false;
         }
         return true;

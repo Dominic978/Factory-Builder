@@ -120,4 +120,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPos: {x: 0, y: 0}
   size: {x: 0, y: 0}
-  test: {fileID: 11400000, guid: cb224f51a28d3b84b9d47eef58af2df7, type: 2}
+  inputFilter:
+    values: []
+  outputFilter:
+    values: []
+  randomItemsToGrab: []

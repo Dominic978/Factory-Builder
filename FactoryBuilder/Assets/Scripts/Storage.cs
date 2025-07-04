@@ -55,14 +55,18 @@ public class Storage : Building
             {
                 int num = currentIndexOfOutput % 2;
                 ConveyerBelt belt = outputConveyerBelts[(currentIndexOfOutput - num) / 2];
+                //give the object a position under the map so we can't see it when it spawns
                 if (num == 0 && belt.conveyerChain[2].item == null)
-                    belt.conveyerChain[2].item = Instantiate(itemData.worldItem).GetComponent<WorldItem>();
+                    belt.conveyerChain[2].item = Instantiate(itemData.worldItem, new Vector3(0,-100,0), Quaternion.identity).GetComponent<WorldItem>();
                 else if (num == 1 && belt.conveyerChain[0].item == null)
-                    belt.conveyerChain[0].item = Instantiate(itemData.worldItem).GetComponent<WorldItem>();
-                currentIndexOfOutput = (currentIndexOfOutput + 1) % (outputConveyerBelts.Length * 2);
+                    belt.conveyerChain[0].item = Instantiate(itemData.worldItem, new Vector3(0, -100, 0), Quaternion.identity).GetComponent<WorldItem>();
             }
+            currentIndexOfOutput = (currentIndexOfOutput + 1) % (outputConveyerBelts.Length * 2);
         }
     }
+
+    public SerializableHashSet<ItemData> inputFilter = new SerializableHashSet<ItemData>();
+    public SerializableHashSet<ItemData> outputFilter = new SerializableHashSet<ItemData>();
 
     /// <summary>
     /// Do not fret about removing the world item as this method will remove it if it can be added
@@ -74,15 +78,25 @@ public class Storage : Building
             Destroy(worldItem.gameObject);
     }
 
-    public virtual bool AddItem(ItemData itemData, int amount = 1)
+    public virtual bool AddItem(ItemData itemData, int amount = 1, bool careAboutFilter = true)
     {
-        //will always be added as im making this a very simple storage script
-        if (!storedItems.TryAdd(itemData, amount))
+        if (outputFilter.Count == 0)
+            careAboutFilter = false;
+
+        if (!careAboutFilter || inputFilter.Contains(itemData))
         {
-            storedItems[itemData] += amount;//if we got it increase value
+            //will always be added as im making this a very simple storage script
+            if (storedItems.TryAdd(itemData, amount))
+                UpdateRandomItemsToGrab();
+            else
+                storedItems[itemData] += amount;//if we got it increase value
+            return true;
         }
-        return true;
+        return false;
     }
+
+    //random items to randomly remove for the "ItemData RemoveItem()" function
+    protected ItemData[] randomItemsToGrab = new ItemData[0];
 
     /// <summary>
     /// removes random item from inventory if ItemData and decreases count if return is not null
@@ -90,11 +104,12 @@ public class Storage : Building
     /// <returns></returns>
     public virtual ItemData RemoveItem()
     {
-        if (storedItems.Count == 0)
-            return null;
-        KeyValuePair<ItemData, int> pair = storedItems.ElementAt(Random.Range(0, storedItems.Count));
-        if (RemoveItem(pair.Key))
-            return pair.Key;
+        if (randomItemsToGrab.Length != 0)
+        {
+            ItemData item = randomItemsToGrab[Random.Range(0, randomItemsToGrab.Length)];
+            if (RemoveItem(item))
+                return item;
+        }
         return null;
     }
 
@@ -102,16 +117,46 @@ public class Storage : Building
     /// </summary>
     /// <param name="target"></param>
     /// <returns>if we succesfully removed the target item</returns>
-    public virtual bool RemoveItem(ItemData target, int amount = 1)
+    public virtual bool RemoveItem(ItemData target, int amount = 1, bool careAboutFilter = true)
     {
-        if (storedItems.TryGetValue(target, out int itemAmount))
+        if (outputFilter.Count == 0)
+            careAboutFilter = false;
+
+        if ((!careAboutFilter || outputFilter.Contains(target)) && storedItems.TryGetValue(target, out int itemAmount) && itemAmount >= amount)
         {
-            if (itemAmount <= amount)
+            if (itemAmount == amount)
+            {
                 storedItems.Remove(target);
+                UpdateRandomItemsToGrab();
+            }
             else
-                itemAmount -= amount;
+                storedItems[target] -= amount;
             return true;
         }
         return false;
+    }
+
+    protected void UpdateRandomItemsToGrab()
+    {
+        ItemData[] storedItemsKeyArr = storedItems.Keys.ToArray();
+        if (outputFilter.Count != 0)
+        {
+            List<int> removeIndex = new List<int>();
+            for (int i = 0; i < storedItemsKeyArr.Length; i++)
+            {
+                if (!outputFilter.Contains(storedItemsKeyArr[i]))
+                    removeIndex.Add(i);
+            }
+
+            randomItemsToGrab = new ItemData[storedItemsKeyArr.Length - removeIndex.Count];
+            int index = 0;
+            for (int i = 0; i < storedItemsKeyArr.Length; i++)
+            {
+                if (!removeIndex.Contains(i))
+                {
+                    randomItemsToGrab[index++] = storedItemsKeyArr[i];
+                }
+            }
+        }
     }
 }

@@ -120,4 +120,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPos: {x: 0, y: 0}
   size: {x: 0, y: 0}
+  inputFilter:
+    values:
+    - {fileID: 11400000, guid: cb224f51a28d3b84b9d47eef58af2df7, type: 2}
+  outputFilter:
+    values:
+    - {fileID: 11400000, guid: 094872ceb0ea9734bbeb7aac90528295, type: 2}
   targetRecipe: {fileID: 11400000, guid: bf05afa6cd27cb04e93e0856dee5f34b, type: 2}
